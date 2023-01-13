@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using IndraEstudiantes.Entidades.Herramientas.Interfaces;
 using IndraEstudiantes.Entidades.Herramientas;
+using System.Text.RegularExpressions;
 
 namespace IndraEstudiantes.Cliente.Pages
 {
@@ -17,6 +18,36 @@ namespace IndraEstudiantes.Cliente.Pages
             this.IRestHelper = IRestHelper;
 
             this.Calificaciones = new();
+        }
+        public IActionResult OnPost()
+        {
+            try
+            {
+                BusquedaBindingModel busqueda = new()
+                {
+                    Tipo_busqueda = "MEJORES NOTAS",
+                    Texto_busqueda = "MEJORES NOTAS",
+                };
+
+                RestResponseModel response = this.IRestHelper.CallMethodPost("/ExportarCalificaciones",
+                    JsonConvert.SerializeObject(busqueda));
+
+                if (response == null)
+                    throw new Exception("Error buscando las calificaciones");
+
+                if (!response.IsSucess)
+                    throw new Exception($"Error buscando las calificaciones | {response.Response}");
+
+                string url = response.Response.Replace("\"", "");
+
+                var uri = new Uri(url);
+                return Redirect(uri.AbsoluteUri);
+            }
+            catch (Exception)
+            {
+                //Se puede controlar los errores y enviar una pagina con las alertas
+                return NotFound();
+            }
         }
         public void OnGet(int id)
         {

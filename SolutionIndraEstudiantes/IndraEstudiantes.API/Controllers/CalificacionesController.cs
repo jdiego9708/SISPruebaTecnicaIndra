@@ -135,5 +135,43 @@ namespace IndraEstudiantes.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("ExportarCalificaciones")]
+        public IActionResult ExportarCalificaciones(JObject busquedaJson)
+        {
+            try
+            {
+                logger.LogInformation("Inicio de exportar calificacion");
+
+                if (busquedaJson == null)
+                    throw new Exception("exportar calificacion vacío compruebe la info enviada");
+
+                BusquedaBindingModel busqueda = busquedaJson.ToObject<BusquedaBindingModel>();
+
+                if (busqueda == null)
+                {
+                    logger.LogInformation("Sin información de busqueda calificacion");
+                    throw new Exception("Sin información de busqueda calificacion");
+                }
+                else
+                {
+                    RestResponseModel rpta = this.ICalificacionesServicio.GuardarArchivoCalificaciones(busqueda);
+                    if (rpta.IsSucess)
+                    {
+                        logger.LogInformation($"Exportar de calificacion exitoso");
+                        return Ok(rpta.Response);
+                    }
+                    else
+                    {
+                        return BadRequest(rpta.Response);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error en el controlador de exportar calificacion", ex);
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

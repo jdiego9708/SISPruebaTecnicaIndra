@@ -1,9 +1,11 @@
 ﻿using IndraEstudiantes.AccesoDatos.Interfaces;
+using IndraEstudiantes.Entidades.Herramientas.Interfaces;
 using IndraEstudiantes.Entidades.Modelos;
 using IndraEstudiantes.Entidades.ModelosConfiguracion;
 using IndraEstudiantes.Servicios.Interfaces;
 using Newtonsoft.Json;
 using System.Data;
+using System.Text;
 
 namespace IndraEstudiantes.Servicios.Servicios
 {
@@ -11,9 +13,12 @@ namespace IndraEstudiantes.Servicios.Servicios
     {
         #region CONSTRUCTORES E INYECCION DE DEPENDENCIAS
         public ICalificacionesDac ICalificacionesDac { get; set; }
-        public CalificacionesServicio(ICalificacionesDac ICalificacionesDac)
+        public IBlobStorageService IBlobStorageService { get; set; }
+        public CalificacionesServicio(ICalificacionesDac ICalificacionesDac,
+            IBlobStorageService IBlobStorageService)
         {
             this.ICalificacionesDac = ICalificacionesDac;
+            this.IBlobStorageService = IBlobStorageService;
         }
         #endregion
 
@@ -156,6 +161,60 @@ namespace IndraEstudiantes.Servicios.Servicios
 
                 response.IsSucess = true;
                 response.Response = JsonConvert.SerializeObject(calificaciones);
+            }
+            catch (Exception ex)
+            {
+                response.IsSucess = false;
+                response.Response = ex.Message;
+            }
+            return response;
+        }
+        public RestResponseModel GuardarArchivoCalificaciones(BusquedaBindingModel busqueda)
+        {
+            RestResponseModel response = new();
+            try
+            {
+                if (string.IsNullOrEmpty(busqueda.Tipo_busqueda))
+                    throw new Exception("El tipo de búsqueda no puede estar vacío");
+
+                if (string.IsNullOrEmpty(busqueda.Texto_busqueda))
+                    throw new Exception("El texto de búsqueda no puede estar vacío");
+
+                string rpta =
+                    this.ICalificacionesDac.BuscarCalificaciones(busqueda.Tipo_busqueda,
+                    busqueda.Texto_busqueda, out DataTable dtCalificacion);
+
+                List<Calificaciones> calificaciones = new();
+
+                if (dtCalificacion == null)
+                {
+                    if (rpta.Equals("OK"))
+                    {
+                        calificaciones.Add(new Calificaciones()
+                        {
+                            Materia = "NO HAY CALIFICACIONES PARA MOSTRAR",
+                        });
+
+                        response.IsSucess = true;
+                        response.Response = JsonConvert.SerializeObject(calificaciones);
+                        return response;
+                    }
+                    else
+                        throw new Exception($"Error | {rpta}");
+                }
+
+                calificaciones = (from DataRow row in dtCalificacion.Rows
+                                  select new Calificaciones(row)).ToList();
+
+                string calificacionesJson = JsonConvert.SerializeObject(calificaciones);
+
+                MemoryStream streamJson = new(Encoding.UTF8.GetBytes(calificacionesJson));
+
+                BlobResponse blobresponse = this.IBlobStorageService.SubirArchivoContainerBlobStorage(streamJson,
+                    $"pruebaindra{DateTime.Now:yyyy-MM-dd}{DateTime.Now:HH_mm}.json", "archivosvarios");
+
+                response.IsSucess = true;
+                response.Response = Convert.ToString(blobresponse.Message);
             }
             catch (Exception ex)
             {

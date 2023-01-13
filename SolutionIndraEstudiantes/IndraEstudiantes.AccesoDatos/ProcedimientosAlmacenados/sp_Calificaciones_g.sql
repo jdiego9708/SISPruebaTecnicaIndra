@@ -24,4 +24,11 @@ BEGIN
 		INNER JOIN Estudiantes es ON ca.Id_estudiante = es.Id_estudiante
 		WHERE ca.Materia = @Texto_busqueda
 	END
+	ELSE IF (@Tipo_busqueda = 'MEJORES NOTAS')
+	BEGIN
+		SELECT *
+		FROM Calificaciones ca
+		INNER JOIN Estudiantes es ON ca.Id_estudiante = es.Id_estudiante
+		WHERE ca.Valor_nota >= 5 
+	END
 END

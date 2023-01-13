@@ -26,7 +26,8 @@ builder.Services.AddTransient<IConexionDac, ConexionDac>()
                 .AddTransient<ICalificacionesServicio, CalificacionesServicio>()
                 .AddTransient<IEstudiantesServicio, EstudiantesServicio>()
                 .AddTransient<ICalificacionesDac, CalificacionesDac>()
-                .AddTransient<IEstudiantesDac, EstudiantesDac>();
+                .AddTransient<IEstudiantesDac, EstudiantesDac>()
+                .AddTransient<IBlobStorageService, BlobStorageService>();
 
 builder.Services.AddCors();
 
