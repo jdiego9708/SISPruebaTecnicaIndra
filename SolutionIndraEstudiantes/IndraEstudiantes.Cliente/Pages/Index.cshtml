@@ -1,0 +1,35 @@
+﻿@page
+@using IndraEstudiantes.Entidades.Modelos;
+@model IndexModel
+@{
+    ViewData["Title"] = "Estudiantes";
+}
+
+<form method="post">
+    <h4>Estudiantes</h4>
+    <hr />
+    <table cellpadding="20" cellspacing="20">
+        <tr>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Edad</th>
+            <th>Sexo</th>
+            <th>Curso</th>
+        </tr>
+        @foreach (Estudiantes estudiante in Model.Estudiantes)
+        {
+            <tr>
+                <td>@estudiante.Nombres_estudiante</td>
+                <td>@estudiante.Apellidos_estudiante</td>
+                <td>@estudiante.Edad_estudiante</td>
+                <td>@estudiante.Sexo_estudiante</td>
+                <td>@estudiante.Curso_estudiante</td>
+                <td>
+                    <input type="hidden" name="txtidestudiante" value="@estudiante.Id_estudiante" />
+                    <a asp-page="/ObservarCalificacionesPage" asp-route-ID="@estudiante.Id_estudiante"
+                   class="btn btn-primary m-1">Calificaciones</a>
+                </td>
+            </tr>
+        }
+    </table>
+</form>

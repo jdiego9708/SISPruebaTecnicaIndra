@@ -1,0 +1,55 @@
+﻿@page
+@model IndraEstudiantes.Cliente.Pages.InsertarEstudianteModel
+@{
+}
+<div class="container py-4">
+    <form id="datosForm" method="post">
+
+        <div class="mb-3">
+            <label class="form-label" for="txtNombresId">Nombre</label>
+            <input class="form-control" name="txtNombres" id="txtNombresId" type="text" placeholder="Nombres" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Nombre es requerido.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtApellidosId">Apellidos</label>
+            <input class="form-control" name="txtApellidos" id="txtApellidosId" type="text" placeholder="Apellidos" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Apellido es requerido.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtEdadId">Edad</label>
+            <input class="form-control" name="txtEdad" id="txtEdadId" type="number" placeholder="Edad" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Edad es requerido.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="listGeneroId">Genero</label>
+            <select name="listGenero" id="listGeneroId">
+                <option value="">Seleccione un género</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtCursoId">Curso</label>
+            <input class="form-control" name="txtCurso" id="txtCursoId" type="text" placeholder="Curso" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Curso es requerido.</div>
+        </div>
+
+        <div class="d-none" id="sucessMessage">
+            <div class="text-center mb-3">Usuario creado con éxito!</div>
+        </div>
+
+        <div class="d-none" id="errorMessage">
+            <div class="text-center text-danger mb-3">Error guardando el usuario!</div>
+        </div>
+
+        <div class="d-grid">
+            <button class="btn btn-primary btn-lg" onclick="">Guardar estudiante</button>
+        </div>
+
+    </form>
+
+</div>

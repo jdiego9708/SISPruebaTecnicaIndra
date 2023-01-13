@@ -1,0 +1,48 @@
+﻿@page "{id}"
+@model IndraEstudiantes.Cliente.Pages.InsertarCalificacionPageModel
+@{
+}
+<div class="container py-4">
+    <form id="datosForm" method="post">
+
+        <div class="mb-3">
+            <label class="form-label" for="txtNombresId">Agregar una nueva nota al estudiante: </label>
+            <input class="form-control" name="txtNombres" id="txtNombresId" type="text" readonly="readonly" 
+            value="@Model.Nombre_estudiante"/>
+            <input class="form-control" name="txtIdEstudiante" id="txtIdEstudianteId" type="text"
+                   data-sb-validations="required" hidden="hidden"
+                   value="@Model.Id_estudiante"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtMateriaId">Materia</label>
+            <input class="form-control" name="txtMateria" id="txtMateriaId" type="text" placeholder="Materia" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Materia es requerido.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtPeriodoId">Periodo</label>
+            <input class="form-control" name="txtPeriodo" id="txtPeriodoId" type="text" placeholder="Periodo" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Periodo es requerido.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="txtNotaId">Nota</label>
+            <input class="form-control" name="txtNota" id="txtNotaId" type="number" placeholder="Nota" data-sb-validations="required" />
+            <div class="invalid-feedback" data-sb-feedback="name:required">Nota es requerido.</div>
+        </div>
+
+        <div class="d-none" id="sucessMessage">
+            <div class="text-center mb-3">Nota creada con éxito!</div>
+        </div>
+
+        <div class="d-none" id="errorMessage">
+            <div class="text-center text-danger mb-3">Error guardando la nota!</div>
+        </div>
+
+        <div class="d-grid">
+            <button class="btn btn-primary btn-lg" onclick="">Guardar nota</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,29 @@
+﻿@page "{id}"
+@using IndraEstudiantes.Entidades.Modelos;
+@model IndraEstudiantes.Cliente.Pages.ObservarCalificacionesPageModel
+@{
+}
+<form method="post">
+    <h4>Calificaciones</h4>
+    <hr />
+    <a asp-page="/InsertarCalificacionPage"
+       asp-route-ID="@Model.Id_estudiante"
+       class="btn btn-primary m-1">Nueva Calificación</a>
+    <table cellpadding="20" cellspacing="20">
+        <tr>
+            <th>Estudiante</th>
+            <th>Materia</th>
+            <th>Periodo</th>
+            <th>Nota</th>
+        </tr>
+        @foreach (Calificaciones calificacion in Model.Calificaciones)
+        {
+            <tr>
+                <td>@calificacion.Estudiante.Nombres_estudiante</td>
+                <td>@calificacion.Materia</td>
+                <td>@calificacion.Periodo</td>
+                <td>@calificacion.Valor_nota</td>
+            </tr>
+        }
+    </table>
+</form>
