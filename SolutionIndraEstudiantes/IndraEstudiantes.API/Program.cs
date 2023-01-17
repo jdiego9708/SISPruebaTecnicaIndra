@@ -5,6 +5,7 @@ using IndraEstudiantes.Entidades.Herramientas;
 using Microsoft.OpenApi.Models;
 using IndraEstudiantes.Servicios.Interfaces;
 using IndraEstudiantes.Servicios.Servicios;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,22 @@ builder.Services.AddControllers()
     .AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+Assembly GetAssemblyByName(string name)
+{
+    return AppDomain.CurrentDomain.GetAssemblies().
+           SingleOrDefault(assembly => assembly.GetName().Name == name);
+}
+
+var a = GetAssemblyByName("IndraEstudiantes.API");
+
+using var stream = a.GetManifestResourceStream("IndraEstudiantes.API.appsettings.json");
+
+var config = new ConfigurationBuilder()
+            .AddJsonStream(stream)
+            .Build();
+
+builder.Configuration.AddConfiguration(config);
 
 builder.Services.AddSwaggerGen(c =>
 {

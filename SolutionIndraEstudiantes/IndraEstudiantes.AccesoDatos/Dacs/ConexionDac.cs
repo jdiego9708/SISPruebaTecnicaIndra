@@ -14,6 +14,9 @@ namespace IndraEstudiantes.AccesoDatos.Dacs
 
             var settings = this.Configuration.GetSection("ConnectionStrings");
             this.ConnectionStringsModel = settings.Get<ConnectionStrings>();
+
+            if (this.ConnectionStringsModel == null)
+                this.ConnectionStringsModel = new();
         }
         public string Cn()
         {
